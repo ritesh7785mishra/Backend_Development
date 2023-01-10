@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+  </head>
+  <body>
+    <form>
+      <label for="">Email</label>
+      <input id="email" type="email" />
+      <label for="">Name</label>
+      <input id="name" type="text" />
+      <label for="">password</label>
+      <input id="password" type="password" />
+      <button>SignUp</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      let btn = document.querySelector("button");
+      btn.addEventListener("click", async function (e) {
+        e.preventDefault();
+        let email = document.getElementById("email").value;
+        let name = document.getElementById("name").value;
+        let password = document.getElementById("password").value;
+
+        let resp = await axios.post("/auth/signup", { email, name, password });
+        console.log("resp", resp);
+      });
+    </script>
+  </body>
+</html>

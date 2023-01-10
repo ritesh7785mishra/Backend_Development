@@ -1,73 +1,92 @@
 const userModel = require("../models/userModel");
 
-module.exports.getUsers = async function getUsers(req, res) {
-  let allUsers = await userModel.find();
+module.exports.getUser = async function getUser(req, res) {
+  let id = req.params.id;
+  let user = await userModel.findById(id);
   // let user = await userModel.findOne({ name: "Ritesh" });
-  res.json({
-    message: "list of allusers",
-    data: allUsers,
-  });
-};
+  // res.json({
+  //   message: "list of allusers",
+  //   data: allUsers,
+  // });
 
-module.exports.postUser = function postUser(req, res) {
-  console.log(req.body);
-  users = req.body;
-  res.json({
-    message: "data received successfully",
-    user: req.body,
-  });
+  if (user) {
+    res.json(user);
+  } else {
+    res.json({
+      message: "user not found",
+    });
+  }
 };
 
 module.exports.updateUser = async function updateUser(req, res) {
-  console.log("req body ->", req.body);
-  //updated data in users object
-  let dataToBeUpdated = req.body;
-  let user = await userModel.findOneAndUpdate(
-    { email: "abc@gmail.com" },
-    dataToBeUpdated
-  );
-  // for (key in dataToBeUpdated) {
-  //   users[key] = dataToBeUpdated[key];
-  // }
-  res.json({
-    message: "data updated successfully",
-  });
-};
-module.exports.deleteUser = async function deleteUser(req, res) {
-  // users = {};
-  let user = await userModel.findOneAndDelete({ email: "dcwk@gmail.com" });
-  res.json({
-    message: "data deleted successfully",
-    data: user,
-  });
-};
+  try {
+    console.log("req body ->", req.body);
+    //updated data in users object
+    let id = req.params.id;
+    let user = await userModel.findById(id);
+    let dataToBeUpdated = req.body;
+    if (user) {
+      const keys = [];
+      for (let key in dataToBeUpdated) {
+        keys.push(key);
+      }
 
-module.exports.getUserById = function getUserById(req, res) {
-  console.log(req.param.id);
-  let paramId = req.params.id;
-  let obj = {};
-  for (let i = 0; i < users.length; i++) {
-    if (users[i]["id"] == paramId) {
-      obj = users[i];
+      for (let index = 0; index < keys.length; index++) {
+        user[keys[i]] = dataToBeUpdated[keys[i]];
+      }
+      const updatedData = await user.save(); //
+      res.json({
+        message: "data updated successfully",
+      });
+    } else {
+      res.json({
+        message: "user not found",
+      });
     }
+  } catch (error) {
+    res.json({
+      message: error.message,
+    });
   }
-
-  res.json({
-    message: "req received",
-    data: obj,
-  });
 };
-//   function getCookies(req, res) {
-//     let cookies = req.cookies;
-//     console.log(cookies);
-//     res.send("Cookies Received");
-//   }
-//   function setCookies(req, res) {
-//     // res.setHeader("Set-Cookie", "isLoggedIn=true");
-//     res.cookie("isLoggedIn", true, {
-//       maxAge: 1000 * 60 * 60 * 24,
-//       secure: true, // can be accessed only through secure sights.
-//       httpOnly: true, //cookie will only accessible through backend can be accessed throug front end
-//     });
-//     res.send("Cookies has been set");
-//   }
+
+module.exports.deleteUser = async function deleteUser(req, res) {
+  try {
+    let id = req.params.id;
+    let user = await userModel.findByIdAndDelete(id);
+    if (user) {
+      return res.json({
+        message: "data deleted successfully",
+        data: user,
+      });
+    } else {
+      return res.json({
+        message: "user not found",
+      });
+    }
+  } catch (error) {
+    return res.json({
+      message: error.message,
+    });
+  }
+};
+
+module.exports.getAllUser = async function getUserById(req, res) {
+  try {
+    let users = await userModel.find();
+    if (users) {
+      res.json({
+        message: "users retrieved",
+        data: users,
+      });
+    } else {
+      res.json({
+        message: "Users not available",
+      });
+    }
+  } catch (error) {
+    res.json({
+      message: error.message,
+    });
+  }
+};

@@ -4,41 +4,22 @@ const userModel = require("../models/userModel");
 const protectRoute = require("./authHelper");
 
 const {
-  getUsers,
-  postUser,
+  getUser,
   updateUser,
   deleteUser,
-  getUserById,
+  getAllUser,
 } = require("../controller/userController");
-let users = [
-  {
-    id: 1,
-    name: "Ritesh",
-  },
-  {
-    id: 2,
-    name: "Shubham",
-  },
-  {
-    id: 3,
-    name: "Vishal",
-  },
-];
 
-const userRouter = express.Router();
-// app.use("/users", userRouter);
+// user ke options
+userRouter.route("/:id").patch(updateUser).delete(deleteUser);
 
-userRouter
-  .route("/")
-  .get(protectRoute, getUsers)
-  .post(postUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+//Profile Page
+app.use(protectRoute);
+userRouter.route("/userProfile").get(getUser);
 
-// userRouter.route("/getCookies").get(getCookies);
+//admin specific function
+app.use(isAuthorise(["admin"]));
 
-// userRouter.route("/setCookies").get(setCookies);
-
-userRouter.route("/:id").get(getUserById);
+userRouter.route("").get(getAllUser);
 
 module.exports = userRouter;

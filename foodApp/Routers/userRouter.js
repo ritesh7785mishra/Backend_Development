@@ -24,6 +24,10 @@ userRouter.route("/:id").patch(updateUser).delete(deleteUser);
 userRouter.route("/signup").post(signup);
 userRouter.route("/login").post(login);
 
+userRouter.route("/forgetpassword").post(forgetpassword);
+userRouter.route("/resetpassword/:token");
+post(resetpassword);
+
 //Profile Page
 userRouter.use(protectRoute);
 userRouter.route("/userProfile").get(getUser);

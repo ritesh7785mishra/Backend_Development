@@ -103,3 +103,54 @@ module.exports.protectRoute = async function protectRoute(req, res, next) {
     });
   }
 };
+
+//forgetPassword
+module.exports.forgetpassword = async function forgetpassword(req, res) {
+  let { email } = req.body;
+  try {
+    const user = await userModel.findOne({ email: email });
+    if (user) {
+      //createResetToken() used to create new token
+      const resetToken = user.createResetToken();
+      let resetPasswordLink = `${req.protocol}://${req.get(
+        "host"
+      )}/resetpassword/${resetToken}`;
+
+      //send email to the user
+      //nodemailer
+    } else {
+      return res.json({
+        message: "Please signup first ",
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+//resetPasswod
+module.exports.resetpassword = async function resetpassword(req, res) {
+  try {
+    const token = req.params.token;
+    let { password, confirmPassword } = req.body;
+    const user = await userModel.findOne({ resetToken: token });
+    if (user) {
+      //reset password handler will change password and confirm password in db
+      user.resetPasswordHandler(password, confirmPassword);
+      await user.save();
+      res.json({
+        message: "user password changes successfully please login again ",
+      });
+    } else {
+      res.json({
+        message: "user not found",
+      });
+    }
+  } catch (error) {
+    res.json({
+      message: err.message,
+    });
+  }
+};

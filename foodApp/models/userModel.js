@@ -35,7 +35,7 @@ const userSchema = mongoose.Schema({
   },
   confirmPassword: {
     type: String,
-    // required: true,
+    required: true,
     minLength: 8,
     validate: function () {
       return this.confirmPassword == this.password;
@@ -50,23 +50,24 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "img/users/default.jpeg",
   },
+  resetToken: String,
 });
 
-userSchema.pre("save", function () {
-  this.confirmPassword = undefined;
-});
-
-// userSchema.pre("save", async function () {
-//   let salt = await bcrypt.genSalt();
-//   let hashedString = await bcrypt.hash(this.password, salt);
-//   this.password = hashedString;
+// userSchema.pre("save", function () {
+//   this.confirmPassword = undefined;
 // });
 
-userSchema.post("save", (doc) => {
-  console.log("Post save called", doc);
-});
+// // userSchema.pre("save", async function () {
+// //   let salt = await bcrypt.genSalt();
+// //   let hashedString = await bcrypt.hash(this.password, salt);
+// //   this.password = hashedString;
+// // });
 
-//model
+// userSchema.post("save", (doc) => {
+//   console.log("Post save called", doc);
+// });
+
+// //model
 
 const userModel = mongoose.model("userModel", userSchema);
 

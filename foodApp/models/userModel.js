@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 const emailValidator = require("email-validator");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 const db_link =
   "mongodb+srv://admin:XdE8RNtOJ43zIWy1@cluster0.q1orxes.mongodb.net/?retryWrites=true&w=majority";
@@ -67,6 +68,20 @@ const userSchema = mongoose.Schema({
 //   console.log("Post save called", doc);
 // });
 
+userSchema.methods.createResetToken = function () {
+  // crypto package...
+  // crypto is now built in with nodejs
+
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  this.resetToken = resetToken;
+  return resetToken;
+};
+
+userSchema.methods.resetPasswordHandler = function (password, confirmPassword) {
+  this.password = password;
+  this.confirmPassword = confirmPassword;
+  this.resetToken = undefined;
+};
 // //model
 
 const userModel = mongoose.model("userModel", userSchema);

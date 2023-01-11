@@ -3,12 +3,10 @@ mongoose.set("strictQuery", true);
 const emailValidator = require("email-validator");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-
-const db_link =
-  "mongodb+srv://admin:XdE8RNtOJ43zIWy1@cluster0.q1orxes.mongodb.net/?retryWrites=true&w=majority";
+require("dotenv").config();
 
 mongoose
-  .connect(db_link)
+  .connect(process.env.db_link)
   .then(function (db) {
     console.log("data base connected");
   })

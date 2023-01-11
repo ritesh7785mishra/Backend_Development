@@ -68,7 +68,7 @@ module.exports.login = async function login(req, res) {
 
 module.exports.isAuthorised = function isAuthorised(roles) {
   return function (req, res, next) {
-    if (roles.include(req.role == true)) {
+    if (roles.includes(req.role) == true) {
       next();
     } else {
       res.status(401).json({
@@ -83,7 +83,6 @@ module.exports.isAuthorised = function isAuthorised(roles) {
 module.exports.protectRoute = async function protectRoute(req, res, next) {
   try {
     let token;
-
     if (req.cookies.login) {
       token = req.cookies.login;
       let payload = jwt.verify(token, process.env.JWT_KEY);
@@ -92,14 +91,10 @@ module.exports.protectRoute = async function protectRoute(req, res, next) {
         req.role = user.role;
         req.id = user.id;
         next();
-      } else {
-        return res.json({
-          message: "logging failed , user not verified",
-        });
       }
     } else {
       return res.json({
-        message: " Operation not valid",
+        message: "please login",
       });
     }
   } catch (error) {

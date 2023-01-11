@@ -9,7 +9,6 @@ const db_link =
 mongoose
   .connect(db_link)
   .then(function (db) {
-    // console.log(db);
     console.log("data base connected");
   })
   .catch((err) => {
@@ -36,7 +35,7 @@ const userSchema = mongoose.Schema({
   },
   confirmPassword: {
     type: String,
-    required: true,
+    // required: true,
     minLength: 8,
     validate: function () {
       return this.confirmPassword == this.password;

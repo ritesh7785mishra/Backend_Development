@@ -1,13 +1,9 @@
 const userModel = require("../models/userModel");
+const { login } = require("./authController");
 
 module.exports.getUser = async function getUser(req, res) {
-  let id = req.params.id;
+  let id = req.id;
   let user = await userModel.findById(id);
-  // let user = await userModel.findOne({ name: "Ritesh" });
-  // res.json({
-  //   message: "list of allusers",
-  //   data: allUsers,
-  // });
 
   if (user) {
     res.json(user);
@@ -20,7 +16,6 @@ module.exports.getUser = async function getUser(req, res) {
 
 module.exports.updateUser = async function updateUser(req, res) {
   try {
-    console.log("req body ->", req.body);
     //updated data in users object
     let id = req.params.id;
     let user = await userModel.findById(id);
@@ -31,12 +26,13 @@ module.exports.updateUser = async function updateUser(req, res) {
         keys.push(key);
       }
 
-      for (let index = 0; index < keys.length; index++) {
+      for (let i = 0; i < keys.length; i++) {
         user[keys[i]] = dataToBeUpdated[keys[i]];
       }
       const updatedData = await user.save(); //
       res.json({
         message: "data updated successfully",
+        updatedData: updatedData,
       });
     } else {
       res.json({
@@ -71,7 +67,7 @@ module.exports.deleteUser = async function deleteUser(req, res) {
   }
 };
 
-module.exports.getAllUser = async function getUserById(req, res) {
+module.exports.getAllUser = async function getAllUser(req, res) {
   try {
     let users = await userModel.find();
     if (users) {

@@ -25,12 +25,12 @@ userRouter.route("/signup").post(signup);
 userRouter.route("/login").post(login);
 
 //Profile Page
-app.use(protectRoute);
+userRouter.use(protectRoute);
 userRouter.route("/userProfile").get(getUser);
 
 //admin specific function
-app.use(isAuthorised(["admin"]));
+userRouter.use(isAuthorised(["admin"]));
 
-userRouter.route("").get(getAllUser);
+userRouter.route("/").get(getAllUser);
 
 module.exports = userRouter;

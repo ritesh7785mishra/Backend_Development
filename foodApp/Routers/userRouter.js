@@ -9,6 +9,9 @@ const {
   login,
   isAuthorised,
   protectRoute,
+  forgetpassword,
+  resetpassword,
+  logout,
 } = require("../controller/authController");
 
 const {
@@ -25,8 +28,8 @@ userRouter.route("/signup").post(signup);
 userRouter.route("/login").post(login);
 
 userRouter.route("/forgetpassword").post(forgetpassword);
-userRouter.route("/resetpassword/:token");
-post(resetpassword);
+userRouter.route("/resetpassword/:token").post(resetpassword);
+userRouter.route("/logout").get(logout);
 
 //Profile Page
 userRouter.use(protectRoute);

@@ -9,3 +9,5 @@ app.listen(3000);
 app.use(cookieParser());
 //base route / router to use
 app.use("/user", userRouter);
+
+const planModel = require("./models/planModel");

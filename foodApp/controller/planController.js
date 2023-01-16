@@ -74,24 +74,36 @@ module.exports.deletePlan = async function deletePlan(req, res) {
 module.exports.updatePlan = async function updatePlan(req, res) {
   try {
     let id = req.params.id;
-    let dataToBeUpdated = req.body;
-    let keys = [];
-    for (let key in dataToBeUpdated) {
-      keys.push(key);
-    }
-
     let plan = await planModel.findById(id);
-    for (let key in keys) {
-      plan[key] = dataToBeUpdated[key];
+    let dataToBeUpdated = req.body;
+
+    if (plan) {
+      let keys = [];
+      for (let key in dataToBeUpdated) {
+        keys.push(key);
+      }
+
+      // for (let key in keys) {
+      //   plan[key] = dataToBeUpdated[key];
+      // }
+
+      for (let i = 0; i < keys.length; i++) {
+        plan[keys[i]] = dataToBeUpdated[keys[i]];
+      }
+
+      const updatedPlan = await plan.save();
+      return res.json({
+        message: "plan updated Successfully",
+        data: updatedPlan,
+      });
+    } else {
+      res.json({
+        message: "Plan not found",
+      });
     }
-    await plan.save();
-    return res.json({
-      message: "plan deleted Successfully",
-      data: deletedPlan,
-    });
   } catch (error) {
     res.status(500).json({
-      message: err.message,
+      message: error.message,
     });
   }
 };

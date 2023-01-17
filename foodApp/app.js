@@ -12,4 +12,4 @@ app.use(cookieParser());
 //base route / router to use
 app.use("/user", userRouter);
 app.use("/plans", planRouter);
-app.use("/reviews", reviewRouter);
+app.use("/review", reviewRouter);

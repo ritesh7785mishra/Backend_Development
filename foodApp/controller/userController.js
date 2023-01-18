@@ -86,3 +86,9 @@ module.exports.getAllUser = async function getAllUser(req, res) {
     });
   }
 };
+
+module.exports.updateProfileImage = function updateProfileImage(req, res) {
+  res.json({
+    message: "file uploaded successfully",
+  });
+};

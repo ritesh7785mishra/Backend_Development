@@ -4,9 +4,7 @@ mongoose.set("strictQuery", true);
 const bcrypt = require("bcrypt");
 // const crypto = require("crypto");
 // require("dotenv").config();
-
-const db_link =
-  "mongodb+srv://admin:XdE8RNtOJ43zIWy1@cluster0.q1orxes.mongodb.net/?retryWrites=true&w=majority";
+const { db_link } = process.env;
 
 mongoose
   .connect(db_link)

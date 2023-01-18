@@ -1,13 +1,15 @@
 const userModel = require("../models/userModel");
 
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+
+const { sendMail } = require("../utility/nodemailer");
 
 //sign up user
 module.exports.signup = async function signup(req, res) {
   try {
     let dataObj = req.body;
     let user = await userModel.create(dataObj);
+    sendMail("signup", user);
     if (user) {
       res.json({
         message: "user signed up",
@@ -120,6 +122,13 @@ module.exports.forgetpassword = async function forgetpassword(req, res) {
       let resetPasswordLink = `${req.protocol}://${req.get(
         "host"
       )}/resetpassword/${resetToken}`;
+
+      let obj = {
+        resetPasswordLink: resetPasswordLink,
+        email: email,
+      };
+
+      sendMail("resetpassword", obj);
 
       //send email to the user
       //nodemailer
